@@ -1,0 +1,36 @@
+import telebot
+from telebot import types
+
+bot = telebot.TeleBot()
+
+@bot.message_handler(commands=['start'])
+def start(message):
+    mess = f'<b>Добрий день {message.from_user.first_name}, вас вітає магазин ЕКО Продукт</b>'
+    markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
+    goods = types.KeyboardButton('Асортимент товару')
+    contact = types.KeyboardButton('Контакти')
+    markup.add(goods, contact)
+    bot.send_message(message.chat.id, mess, parse_mode='html', reply_markup=markup)
+
+
+@bot.message_handler()
+def get_user_text(message):
+    if message.text == "Асортимент товару":
+      photo = open('tea.png', 'rb')
+      markup = types.InlineKeyboardMarkup()
+      markup.add(types.InlineKeyboardButton("Заказати", url="https://t.me/Pantelyuk_007"))
+      bot.send_photo(message.chat.id, photo, caption='<b>Карпатський чай в асортименті</b>', parse_mode='html', reply_markup=markup)
+      photo = open('alko.jpg', 'rb')
+      markup = types.InlineKeyboardMarkup()
+      markup.add(types.InlineKeyboardButton("Заказати", url="https://t.me/Pantelyuk_007"))
+      bot.send_photo(message.chat.id, photo, caption='<b>Наливки в асортименті</b>', parse_mode='html', reply_markup=markup)
+      photo = open('vino.jpg', 'rb')
+      markup = types.InlineKeyboardMarkup()
+      markup.add(types.InlineKeyboardButton("Заказати", url="https://t.me/Pantelyuk_007"))
+      bot.send_photo(message.chat.id, photo, caption='<b>Вино в асортименті</b>', parse_mode='html', reply_markup=markup)
+    if message.text == "Контакти":
+      bot.send_message(message.chat.id, f"<b>Tel:</b> <a>+380680514244</a> Іван, <a>+380686252049</a> Галя", parse_mode='html')
+
+
+
+bot.polling(none_stop=True)
